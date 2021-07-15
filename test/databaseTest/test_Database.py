@@ -25,6 +25,10 @@ class TestDatabase(unittest.TestCase):
         deleteDatabase(TestDatabase.path)
 
     def setUp(self) -> None:
+        self.skipTest("Abstract test class")
+        self.setUpData()
+
+    def setUpData(self):
         createTable(TestDatabase.cursor)
         addDataToTable(TestDatabase.cursor)
         TestDatabase.connection.commit()

@@ -9,6 +9,9 @@ class TestToDoDatabase(databaseTest.test_Database.TestDatabase):
     def createDatabase(self) -> dB.ToDoDatabase:
         return dB.ToDoDatabase("test.db", "items", os.path.dirname(__file__))
 
+    def setUp(self) -> None:
+        self.setUpData()
+
     def test_write_new_entry(self):
         self.database.writeNewEntry({"title": "New Item", "description": "This is a new item."})
         result: List[dict] = self.database.readAllEntries()
