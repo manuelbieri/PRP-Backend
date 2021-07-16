@@ -1,10 +1,9 @@
 import abc
-import os.path
-import sqlite3
 import unittest
 from typing import List
 
 import database.IDatabase as dB
+from testUtilities.databaseUtilities import *
 
 
 class TestDatabase(unittest.TestCase):
@@ -15,14 +14,14 @@ class TestDatabase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        TestDatabase.connection = sqlite3.connect(TestDatabase.path)
-        TestDatabase.cursor = TestDatabase.connection.cursor()
+        TestDatabase.connection, TestDatabase.cursor = setUpConnectionAndCursor(TestDatabase.path)
 
     @classmethod
     def tearDownClass(cls) -> None:
-        TestDatabase.connection.commit()
-        TestDatabase.connection.close()
-        deleteDatabase(TestDatabase.path)
+        cleanUpDatabase(TestDatabase.path, TestDatabase.connection)
+        # TestDatabase.connection.commit()
+        # TestDatabase.connection.close()
+        # deleteDatabase(TestDatabase.path)
 
     def setUp(self) -> None:
         self.skipTest("Abstract test class")
@@ -76,36 +75,3 @@ class TestDatabase(unittest.TestCase):
 
     def test_write_new_entries(self):
         self.fail()
-
-
-def createTable(c: sqlite3.Cursor):
-    query = """
-            CREATE TABLE IF NOT EXISTS "items" (
-                "id"	INTEGER,
-                "title"	TEXT NOT NULL,
-                "description"	TEXT,
-                PRIMARY KEY("id" AUTOINCREMENT)
-            );
-            """
-    c.execute(query)
-
-
-def addDataToTable(c: sqlite3.Cursor):
-    values = [("Shopping", "Grocery Shopping"),
-              ("Lights", "Lights for the dining room"),
-              ("Lights", "Lights for the bathroom"),
-              ("Clean up", None)]
-    try:
-        c.executemany('INSERT INTO items(title, description) VALUES (?,?)', values)
-    except sqlite3.IntegrityError:
-        # data already inserted
-        pass
-
-
-def deleteTable(c: sqlite3.Cursor):
-    c.execute("""DROP TABLE IF EXISTS items""")
-
-
-def deleteDatabase(path: str):
-    assert os.path.isfile(path)
-    os.remove(path)
