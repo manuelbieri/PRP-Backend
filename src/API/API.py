@@ -1,33 +1,47 @@
-import uvicorn
-import database.ToDoDatabase as dB
+import sqlite3
 
-from fastapi import Depends, FastAPI
-from fastapi_utils.cbv import cbv
-from fastapi_utils.inferring_router import InferringRouter
-
+import flask
+import flask_restful
 from typing import List
 
+import database.ToDoDatabase as dB
 
-def get_database() -> dB.ToDoDatabase:
-    return dB.ToDoDatabase("todo.db", "items")
-
-
-app: FastAPI = FastAPI()
-router = InferringRouter()
+app = flask.Flask(__name__)
+api = flask_restful.Api(app)
+data = dB.ToDoDatabase('todo.db', 'items')
 
 
-@cbv(router)
-class Requests:
-    database: dB.ToDoDatabase = Depends(get_database)
-
-    @router.get("/items")
-    def get_all_items(self) -> List[dict]:
-        # Step 4: Use `self.<dependency_name>` to access shared dependencies
-        return self.database.readAllEntries()
+class AllItems(flask_restful.Resource):
+    def get(self) -> flask.Response:
+        entries: List[dict] = data.readAllEntries()
+        return flask.jsonify(entries)
 
 
-app.include_router(router)
+class SelectedItems(flask_restful.Resource):
+    def get(self) -> flask.Response:
+        key: str = flask.request.args.get('key', type=str)
+        value: str = flask.request.args.get('value', type=str)
+        try:
+            entries: List[dict] = data.readEntries(key, value)
+        except sqlite3.OperationalError:
+            return flask.jsonify({'message': 'Database Error'})
+        return flask.jsonify(entries)
 
+
+class SingleItem(flask_restful.Resource):
+    def get(self) -> flask.Response:
+        key: str = flask.request.args.get('key', type=str)
+        value: str = flask.request.args.get('value', type=str)
+        try:
+            entry: dict = data.readEntry(key, value)
+        except sqlite3.OperationalError:
+            return flask.jsonify({'message': 'Database Error'})
+        return flask.jsonify(entry)
+
+
+api.add_resource(AllItems, '/items/index')
+api.add_resource(SelectedItems, '/items')
+api.add_resource(SingleItem, '/item')
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="localhost", port=8000)
+    app.run()
