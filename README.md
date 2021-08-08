@@ -2,13 +2,8 @@
 
 Provides API to backend of the Private-Resource-Planning (PRP).
 
-### ToDo - API
-`\items\index` : returns all items on the todo - list.
-
-`\items?key=col_name&value=col_value` : returns all items meeting the arguments on the todo - list.
-
-`\item?key=col_name&value=col_value` : returns an items meeting the arguments on the todo - list.
-
+### Documentation
+Read the wiki on GitHub.com - [PRP - Backend Wiki](https://github.com/manuelbieri/PRP-Backend/wiki) for explanations about the use.
 
 ### Included Modules
 Modules for functionality:
