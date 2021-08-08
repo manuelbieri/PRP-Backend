@@ -33,7 +33,7 @@ class Database(database.IDatabase.IDatabase, abc.ABC):
         else:
             path = os.path.join(path, database_name)
         assert os.path.isfile(path)
-        self.database = sqlite3.connect(path)
+        self.database = sqlite3.connect(path, check_same_thread=False)
         return self.database
 
     def setTable(self, table: str) -> str:
@@ -111,3 +111,6 @@ class Database(database.IDatabase.IDatabase, abc.ABC):
 
     def readAllEntries(self) -> List[dict]:
         return self.cursor.execute("""SELECT * FROM {table}""".format(table=self.table)).fetchall()
+
+    def closeDatabase(self) -> None:
+        self.database.close()

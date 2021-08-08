@@ -1,16 +1,38 @@
-from fastapi.testclient import TestClient
-
-import API.API as API
+import abc
 import unittest
+import flask.testing
+
+from testUtilities.databaseUtilities import *
 
 
 class APITest(unittest.TestCase):
-    def setUp(self) -> None:
-        self.client = TestClient(API.app)
+    base_path: str
+    database_name: str = "test.db"
+    path: str
+    connection: sqlite3.Connection
+    cursor: sqlite3.Cursor
 
-    def test_setup(self):
-        response = self.client.get("/items")
-        self.assertEqual(200, response.status_code)
-        self.assertEqual([{'description': 'this is a test item.', 'id': 1, 'title': 'test item'},
-                          {'description': 'this is a second test item.', 'id': 2, 'title': 'second test'}],
-                         response.json())
+    @abc.abstractmethod
+    def setUpDatabase(self) -> None:
+        pass
+
+    @abc.abstractmethod
+    def setUpAPIClient(self) -> flask.testing.FlaskClient:
+        pass
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        APITest.connection, APITest.cursor = setUpConnectionAndCursor(APITest.path)
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        cleanUpDatabase(APITest.path, APITest.connection)
+
+    def setUp(self) -> None:
+        setUpData(APITest.connection, APITest.cursor)
+        self.app = self.setUpAPIClient()
+        self.setUpDatabase()
+
+    def tearDown(self) -> None:
+        APITest.connection.commit()
+        deleteTable(APITest.cursor)
