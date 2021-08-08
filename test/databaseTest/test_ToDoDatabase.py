@@ -7,7 +7,7 @@ import database.ToDoDatabase as dB
 
 class TestToDoDatabase(databaseTest.test_Database.TestDatabase):
     def createDatabase(self) -> dB.ToDoDatabase:
-        return dB.ToDoDatabase("test.db", "items", os.path.dirname(__file__))
+        return dB.ToDoDatabase(TestToDoDatabase.database_name, "items", os.path.dirname(__file__))
 
     def setUp(self) -> None:
         self.setUpData()

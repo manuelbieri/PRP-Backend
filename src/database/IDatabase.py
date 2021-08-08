@@ -68,3 +68,10 @@ class IDatabase(abc.ABC):
 
         :return: all entries in the database.
         """
+
+    @abc.abstractmethod
+    def closeDatabase(self) -> None:
+        """
+        Closes the connection to this database.
+        :return: None.
+        """

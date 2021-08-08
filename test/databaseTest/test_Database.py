@@ -8,7 +8,7 @@ from testUtilities.databaseUtilities import *
 
 class TestDatabase(unittest.TestCase):
     database_name: str = "test.db"
-    path = os.path.join(os.path.dirname(__file__), database_name)
+    path: str = os.path.join(os.path.dirname(__file__), database_name)
     connection: sqlite3.Connection
     cursor: sqlite3.Cursor
 
@@ -19,18 +19,12 @@ class TestDatabase(unittest.TestCase):
     @classmethod
     def tearDownClass(cls) -> None:
         cleanUpDatabase(TestDatabase.path, TestDatabase.connection)
-        # TestDatabase.connection.commit()
-        # TestDatabase.connection.close()
-        # deleteDatabase(TestDatabase.path)
 
     def setUp(self) -> None:
         self.skipTest("Abstract test class")
-        self.setUpData()
 
     def setUpData(self):
-        createTable(TestDatabase.cursor)
-        addDataToTable(TestDatabase.cursor)
-        TestDatabase.connection.commit()
+        setUpData(TestDatabase.connection, TestDatabase.cursor)
         self.database: dB.IDatabase = self.createDatabase()
 
     def tearDown(self) -> None:

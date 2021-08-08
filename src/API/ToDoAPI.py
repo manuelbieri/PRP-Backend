@@ -5,10 +5,11 @@ import flask_restful
 from typing import List
 
 import database.ToDoDatabase as dB
+import database.IDatabase as IdB
 
 app = flask.Flask(__name__)
-api = flask_restful.Api(app)
-data = dB.ToDoDatabase('todo.db', 'items')
+api = flask_restful.Api(app, '/api/v1/todo')
+data: IdB.IDatabase = dB.ToDoDatabase('todo.db', 'items')
 
 
 class AllItems(flask_restful.Resource):
@@ -44,4 +45,4 @@ api.add_resource(SelectedItems, '/items')
 api.add_resource(SingleItem, '/item')
 
 if __name__ == "__main__":
-    app.run()
+    app.run(port=5001)

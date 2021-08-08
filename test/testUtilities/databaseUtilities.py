@@ -8,6 +8,12 @@ def setUpConnectionAndCursor(path: str) -> (sqlite3.Connection, sqlite3.Cursor):
     return connection, cursor
 
 
+def setUpData(connection: sqlite3.Connection, cursor: sqlite3.Cursor) -> None:
+    createTable(cursor)
+    addDataToTable(cursor)
+    connection.commit()
+
+
 def cleanUpDatabase(path: str, connection: sqlite3.Connection) -> None:
     connection.commit()
     connection.close()
