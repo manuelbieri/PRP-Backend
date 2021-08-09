@@ -1,4 +1,4 @@
-import CustomExceptions.Exceptions as Exceptions
+import customExceptions.Exceptions as Exceptions
 
 
 def checkAPIArgs(*args) -> None:

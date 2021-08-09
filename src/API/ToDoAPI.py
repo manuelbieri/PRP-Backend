@@ -3,7 +3,7 @@ import flask
 import flask_restful
 from typing import List
 
-import CustomExceptions.Exceptions
+import customExceptions.Exceptions
 import database.ToDoDatabase as dB
 import database.IDatabase as IdB
 
@@ -50,7 +50,7 @@ class SingleItem(flask_restful.Resource):
         description: str = flask.request.args.get('description', type=str)
         try:
             API.APIUtilities.checkAPIArgs(title, description)
-        except CustomExceptions.Exceptions.InvalidArgument:
+        except customExceptions.Exceptions.InvalidArgument:
             return flask.jsonify({'type': 'exception', 'message': 'Invalid Argument for this operation'})
         data.writeNewEntry({'title': title, 'description': description})
         return flask.jsonify({'type': 'success', 'message': 'Entry added successfully'})
@@ -63,7 +63,7 @@ class SingleItem(flask_restful.Resource):
         try:
             API.APIUtilities.checkAPIArgs(entry_id, title, description)
             API.APIUtilities.checkDatabaseID(entry_id)
-        except CustomExceptions.Exceptions.InvalidArgument:
+        except customExceptions.Exceptions.InvalidArgument:
             return flask.jsonify({'type': 'exception', 'message': 'Invalid Argument for this operation'})
         data.updateEntry(entry_id, {'title': title, 'description': description})
         return flask.jsonify({'type': 'success', 'message': 'Entry deleted successfully'})
@@ -73,7 +73,7 @@ class SingleItem(flask_restful.Resource):
         entry_id: int = flask.request.args.get('id', type=int)
         try:
             API.APIUtilities.checkDatabaseID(entry_id)
-        except CustomExceptions.Exceptions.InvalidArgument:
+        except customExceptions.Exceptions.InvalidArgument:
             return flask.jsonify({'type': 'exception', 'message': 'Invalid Argument for this operation'})
         data.deleteEntry(entry_id)
         return flask.jsonify({'type': 'success', 'message': 'Entry deleted successfully'})
