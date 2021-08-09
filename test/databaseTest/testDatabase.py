@@ -64,8 +64,15 @@ class TestDatabase(unittest.TestCase):
         result = self.database.readEntries("title", "Lights")
         self.assertEqual(2, len(result))
 
+    @abc.abstractmethod
     def test_write_new_entry(self):
-        self.fail()
+        pass
 
+    @abc.abstractmethod
     def test_write_new_entries(self):
-        self.fail()
+        pass
+
+    def test_delete_entry(self):
+        self.database.deleteEntry(1)
+        result = self.database.readEntry("id", 1)
+        self.assertEqual({}, result)

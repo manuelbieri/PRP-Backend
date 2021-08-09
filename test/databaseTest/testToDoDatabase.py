@@ -1,11 +1,11 @@
 import os.path
 from typing import List
 
-import databaseTest.test_Database
+import databaseTest.testDatabase
 import database.ToDoDatabase as dB
 
 
-class TestToDoDatabase(databaseTest.test_Database.TestDatabase):
+class TestToDoDatabase(databaseTest.testDatabase.TestDatabase):
     def createDatabase(self) -> dB.ToDoDatabase:
         return dB.ToDoDatabase(TestToDoDatabase.database_name, "items", os.path.dirname(__file__))
 
@@ -35,3 +35,8 @@ class TestToDoDatabase(databaseTest.test_Database.TestDatabase):
              {"titles": "invalid item in dict", "description": "This is the invalid item."}]))
         result: List[dict] = self.database.readAllEntries()
         self.assertEqual(5, len(result))
+
+    def test_update_entry(self):
+        self.database.updateEntry(1, {'title': 'New Title', 'description': 'New Des.'})
+        result = self.database.readEntry('id', 1)
+        self.assertEqual('New Title', result['title'])

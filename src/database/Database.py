@@ -1,9 +1,9 @@
 import abc
 import os.path
+import sqlite3
 from typing import List
 
 import database.IDatabase
-import sqlite3
 
 
 class Database(database.IDatabase.IDatabase, abc.ABC):
@@ -60,7 +60,9 @@ class Database(database.IDatabase.IDatabase, abc.ABC):
     def _executeSearch(self, key, value) -> sqlite3.Cursor:
         operator = self._parseOperator(value)
         value = self._parseValue(value, search=True)
-        return self.cursor.execute("""SELECT * FROM {table} WHERE {key}{operator}{value}""".format(table=self.table, key=key, operator=operator, value=value))
+        return self.cursor.execute(
+            """SELECT * FROM {table} WHERE {key}{operator}{value}""".format(table=self.table, key=key,
+                                                                            operator=operator, value=value))
 
     @staticmethod
     def _parseOperator(value):
@@ -111,6 +113,10 @@ class Database(database.IDatabase.IDatabase, abc.ABC):
 
     def readAllEntries(self) -> List[dict]:
         return self.cursor.execute("""SELECT * FROM {table}""".format(table=self.table)).fetchall()
+
+    def deleteEntry(self, entry_id: int) -> None:
+        self.cursor.execute("""DELETE FROM items WHERE id={id}""".format(id=entry_id))
+        self.database.commit()
 
     def closeDatabase(self) -> None:
         self.database.close()

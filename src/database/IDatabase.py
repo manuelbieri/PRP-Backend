@@ -70,6 +70,25 @@ class IDatabase(abc.ABC):
         """
 
     @abc.abstractmethod
+    def updateEntry(self, entry_id: int, updated_values: dict) -> None:
+        """
+        Updates an entry with new values according to the id.
+
+        :param entry_id: of the entry to update
+        :param updated_values: to replace the old values with for the entry matching the id.
+        :return: None
+        """
+
+    @abc.abstractmethod
+    def deleteEntry(self, entry_id: int) -> None:
+        """
+        Deletes a matching entry from the database.
+
+        :param entry_id: of the entry to delete.
+        :return: None
+        """
+
+    @abc.abstractmethod
     def closeDatabase(self) -> None:
         """
         Closes the connection to this database.
