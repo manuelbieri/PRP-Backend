@@ -1,4 +1,6 @@
 from typing import List
+
+import database.DatabaseUtilites as dataUt
 import database.Database
 
 
@@ -10,8 +12,8 @@ class ToDoDatabase(database.Database.Database):
         assert entry_id > 0
         assert updated_values is not None
         assert len(updated_values) == 2
-        title: str = self._parseValue(updated_values['title'])
-        description: str = self._parseValue(updated_values['description'])
+        title: str = dataUt.parseValue(updated_values['title'])
+        description: str = dataUt.parseValue(updated_values['description'])
         self.cursor.execute("""UPDATE items SET title = {title}, description = {description} WHERE id={id}"""
                             .format(title=title, description=description, id=entry_id))
         self.database.commit()
@@ -20,8 +22,8 @@ class ToDoDatabase(database.Database.Database):
         assert len(entry) > 0
         assert "title" in entry
         assert entry["title"] is not None
-        entry["title"] = self._parseValue(entry["title"])
-        entry["description"] = self._parseValue(entry["description"])
+        entry["title"] = dataUt.parseValue(entry["title"])
+        entry["description"] = dataUt.parseValue(entry["description"])
         self._insertRow(entry)
         self.database.commit()
 

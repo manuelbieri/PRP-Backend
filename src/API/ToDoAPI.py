@@ -9,8 +9,8 @@ import database.IDatabase as IdB
 
 import API.APIUtilities
 
-app = flask.Flask(__name__)
-api = flask_restful.Api(app, '/api/v1/todo')
+app: flask.app.Flask = flask.Flask(__name__)
+api: flask_restful.Api = flask_restful.Api(app, '/api/v1/todo')
 data: IdB.IDatabase = dB.ToDoDatabase('todo.db', 'items')
 
 
