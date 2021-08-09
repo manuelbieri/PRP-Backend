@@ -11,7 +11,7 @@ def parseOperator(value):
         return "="
 
 
-def parseValue(value, search=False) -> str:
+def parseValue(value, search: bool = False) -> str:
     """
     Parses a value into a valid value to insert or search in a sqlite database.
 
@@ -25,6 +25,7 @@ def parseValue(value, search=False) -> str:
     - 'string' -> '"%string%"'
     - 4 -> '4'
 
+    :param search:whether the value should be converted for search or other database tasks.
     :param value: to convert into a valid value for sqlite databases.
     :return: valid value for sqlite databases.
     """

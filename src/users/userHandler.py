@@ -33,7 +33,7 @@ class UserHandler:
         password_hash = passlib.pbkdf2_sha256.hash(password)
         password_hash = dataUt.parseValue(password_hash)
         user_id = dataUt.parseValue(user_id)
-        self.cursor.execute("""INSERT INTO users(name, password) VALUES({input_name},{input_password})""".format(input_name=user_id, input_password=password_hash))
+        self.cursor.execute(f"""INSERT INTO users(name, password) VALUES({user_id},{password_hash})""")
         self.users.commit()
 
     def checkPassword(self, username: str, password: str) -> bool:

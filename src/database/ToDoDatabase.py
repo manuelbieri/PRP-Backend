@@ -14,8 +14,7 @@ class ToDoDatabase(database.Database.Database):
         assert len(updated_values) == 2
         title: str = dataUt.parseValue(updated_values['title'])
         description: str = dataUt.parseValue(updated_values['description'])
-        self.cursor.execute("""UPDATE items SET title = {title}, description = {description} WHERE id={id}"""
-                            .format(title=title, description=description, id=entry_id))
+        self.cursor.execute(f"""UPDATE items SET title = {title}, description = {description} WHERE id={entry_id}""")
         self.database.commit()
 
     def writeNewEntry(self, entry: dict) -> None:
@@ -33,4 +32,4 @@ class ToDoDatabase(database.Database.Database):
             self.writeNewEntry(entry)
 
     def _insertRow(self, entry: dict) -> None:
-        self.cursor.execute("""INSERT INTO items(title,description) VALUES({title},{description})""".format(table=self.table, title=entry["title"], description=entry["description"]))
+        self.cursor.execute(f"""INSERT INTO items(title,description) VALUES({entry["title"]},{entry["description"]})""")

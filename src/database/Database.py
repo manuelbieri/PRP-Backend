@@ -62,8 +62,7 @@ class Database(database.IDatabase.IDatabase, abc.ABC):
         operator = dataUt.parseOperator(value)
         value = dataUt.parseValue(value, search=True)
         return self.cursor.execute(
-            """SELECT * FROM {table} WHERE {key}{operator}{value}""".format(table=self.table, key=key,
-                                                                            operator=operator, value=value))
+            f"""SELECT * FROM {self.table} WHERE {key}{operator}{value}""")
 
     def readEntries(self, key: str, value) -> List[dict]:
         assert key is not None
@@ -76,10 +75,10 @@ class Database(database.IDatabase.IDatabase, abc.ABC):
         return result
 
     def readAllEntries(self) -> List[dict]:
-        return self.cursor.execute("""SELECT * FROM {table}""".format(table=self.table)).fetchall()
+        return self.cursor.execute(f"""SELECT * FROM {self.table}""").fetchall()
 
     def deleteEntry(self, entry_id: int) -> None:
-        self.cursor.execute("""DELETE FROM items WHERE id={id}""".format(id=entry_id))
+        self.cursor.execute(f"""DELETE FROM items WHERE id={entry_id}""")
         self.database.commit()
 
     def closeDatabase(self) -> None:
