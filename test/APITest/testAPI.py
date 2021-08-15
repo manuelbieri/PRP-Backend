@@ -30,7 +30,7 @@ class APITest(unittest.TestCase):
 
     def setUp(self) -> None:
         setUpData(APITest.connection, APITest.cursor)
-        self.app = self.setUpAPIClient()
+        self.app: flask.testing.FlaskClient = self.setUpAPIClient()
         self.setUpDatabase()
 
     def tearDown(self) -> None:
