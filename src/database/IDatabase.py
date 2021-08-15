@@ -3,10 +3,9 @@ import abc
 from typing import List
 
 
-"""Interface for database communication"""
-
-
 class IDatabase(abc.ABC):
+    """Interface for database communication"""
+
     @abc.abstractmethod
     def setTable(self, table: str) -> None:
         """
