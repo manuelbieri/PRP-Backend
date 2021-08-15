@@ -13,7 +13,6 @@ class IDatabase(abc.ABC):
         Sets a new table to work with.
 
         :param table: to work with in consecutive commands.
-        :return: None.
         """
 
     @abc.abstractmethod
@@ -77,7 +76,6 @@ class IDatabase(abc.ABC):
 
         :param entry_id: of the entry to update
         :param updated_values: to replace the old values with for the entry matching the id.
-        :return: None
         """
 
     @abc.abstractmethod
@@ -86,25 +84,21 @@ class IDatabase(abc.ABC):
         Deletes a matching entry from the database.
 
         :param entry_id: of the entry to delete.
-        :return: None
         """
 
     @abc.abstractmethod
     def closeDatabase(self) -> None:
         """
         Closes the connection to this database.
-        :return: None.
         """
 
     @abc.abstractmethod
     def createDatabaseTables(self) -> None:
         """
         Creates the necessary tables for the database.
-        :return: None
         """
 
     def cleanUpDatabase(self) -> None:
         """
         Cleans up all tables in the database.
-        :return: None
         """
