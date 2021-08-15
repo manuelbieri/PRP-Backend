@@ -33,3 +33,14 @@ class ToDoDatabase(database.Database.Database):
 
     def _insertRow(self, entry: dict) -> None:
         self.cursor.execute(f"""INSERT INTO items(title,description) VALUES({entry["title"]},{entry["description"]})""")
+
+    def createDatabaseTables(self) -> None:
+        query = """
+                CREATE TABLE IF NOT EXISTS "items" (
+                    "id"	INTEGER,
+                    "title"	TEXT NOT NULL,
+                    "description"	TEXT,
+                    PRIMARY KEY("id" AUTOINCREMENT)
+                );
+                """
+        self.cursor.execute(query)

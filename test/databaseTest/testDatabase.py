@@ -1,39 +1,30 @@
 import abc
 import unittest
+import os.path
 from typing import List
 
 import database.IDatabase as dB
-from testUtilities.databaseUtilities import *
+import testUtilities.databaseTestUtilities as dataUt
 
 
 class TestDatabase(unittest.TestCase):
     database_name: str = "test.db"
     path: str = os.path.join(os.path.dirname(__file__), database_name)
-    connection: sqlite3.Connection
-    cursor: sqlite3.Cursor
 
     @classmethod
     def setUpClass(cls) -> None:
-        TestDatabase.connection, TestDatabase.cursor = setUpConnectionAndCursor(TestDatabase.path)
+        dataUt.createDatabaseFile(TestDatabase.path)
 
     @classmethod
     def tearDownClass(cls) -> None:
-        cleanUpDatabase(TestDatabase.path, TestDatabase.connection)
+        dataUt.deleteDatabase(TestDatabase.path)
 
     def setUp(self) -> None:
         self.skipTest("Abstract test class")
-
-    def setUpData(self):
-        setUpData(TestDatabase.connection, TestDatabase.cursor)
-        self.database: dB.IDatabase = self.createDatabase()
+        self.database: dB.IDatabase = dB.IDatabase()
 
     def tearDown(self) -> None:
-        TestDatabase.connection.commit()
-        deleteTable(TestDatabase.cursor)
-
-    @abc.abstractmethod
-    def createDatabase(self) -> dB.IDatabase:
-        pass
+        self.database.cleanUpDatabase()
 
     def test_get_tables(self):
         tables: List[str] = self.database.getTables()

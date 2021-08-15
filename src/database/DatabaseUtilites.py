@@ -29,6 +29,8 @@ def parseValue(value, search: bool = False) -> str:
     :param value: to convert into a valid value for sqlite databases.
     :return: valid value for sqlite databases.
     """
+    if value is None:
+        value = ""
     if type(value) == str:
         search_str = "%" if search else ""
         return '"' + search_str + value + search_str + '"'

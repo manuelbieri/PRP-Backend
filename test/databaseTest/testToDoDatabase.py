@@ -1,16 +1,15 @@
 import os.path
 from typing import List
 
+import testUtilities.databaseTestUtilities as dataUt
 import databaseTest.testDatabase
 import database.ToDoDatabase as dB
 
 
 class TestToDoDatabase(databaseTest.testDatabase.TestDatabase):
-    def createDatabase(self) -> dB.ToDoDatabase:
-        return dB.ToDoDatabase(TestToDoDatabase.database_name, "items", os.path.dirname(__file__))
-
     def setUp(self) -> None:
-        self.setUpData()
+        self.database: dB.ToDoDatabase = dB.ToDoDatabase(TestToDoDatabase.database_name, "items", os.path.dirname(__file__))
+        dataUt.addDataToTable(self.database, dataUt.todoValues)
 
     def test_write_new_entry(self):
         self.database.writeNewEntry({"title": "New Item", "description": "This is a new item."})

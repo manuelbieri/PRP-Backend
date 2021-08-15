@@ -9,10 +9,12 @@ import database.DatabaseUtilites as dataUt
 
 class Database(database.IDatabase.IDatabase, abc.ABC):
     def __init__(self, database_name, table, path=None):
-        self.database: sqlite3.Connection = self._setDatabase(database_name, path)
-        self.table: str = self.setTable(table)
+        self.path = path
+        self.database: sqlite3.Connection = self._setDatabase(database_name, self.path)
         self.database.row_factory = self._dictFactory
         self.cursor: sqlite3.Cursor = self.database.cursor()
+        self._setUpDatabase(table)
+        self.table: str = self.setTable(table)
 
     @staticmethod
     def _dictFactory(cursor, row):
@@ -30,12 +32,16 @@ class Database(database.IDatabase.IDatabase, abc.ABC):
 
     def _setDatabase(self, database_name, path=None) -> sqlite3.Connection:
         if path is None:
-            path = os.path.join(os.path.dirname(__file__), "database", database_name)
+            self.path = os.path.join(os.path.dirname(__file__), "database", database_name)
         else:
-            path = os.path.join(path, database_name)
-        assert os.path.isfile(path)
-        self.database = sqlite3.connect(path, check_same_thread=False)
+            self.path = os.path.join(path, database_name)
+        self.database = sqlite3.connect(self.path, check_same_thread=False)
         return self.database
+
+    def _setUpDatabase(self, table: str):
+        current_tables: List[dict] = self.getTables()
+        if not {'name': table} in current_tables:
+            self.createDatabaseTables()
 
     def setTable(self, table: str) -> str:
         assert table is not None
@@ -83,3 +89,9 @@ class Database(database.IDatabase.IDatabase, abc.ABC):
 
     def closeDatabase(self) -> None:
         self.database.close()
+
+    def cleanUpDatabase(self) -> None:
+        delete_cursor: sqlite3.Cursor = self.database.cursor()
+        delete_cursor.execute("""DROP TABLE IF EXISTS items""")
+        self.closeDatabase()
+        del self

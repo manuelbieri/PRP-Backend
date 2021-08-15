@@ -2,15 +2,13 @@ import abc
 import unittest
 import flask.testing
 
-from testUtilities.databaseUtilities import *
+import testUtilities.databaseTestUtilities as dataUt
 
 
 class APITest(unittest.TestCase):
-    base_path: str
+    api_base_path: str
     database_name: str = "test.db"
     path: str
-    connection: sqlite3.Connection
-    cursor: sqlite3.Cursor
 
     @abc.abstractmethod
     def setUpDatabase(self) -> None:
@@ -22,17 +20,16 @@ class APITest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        APITest.connection, APITest.cursor = setUpConnectionAndCursor(APITest.path)
+        dataUt.createDatabaseFile(APITest.path)
 
     @classmethod
     def tearDownClass(cls) -> None:
-        cleanUpDatabase(APITest.path, APITest.connection)
+        dataUt.deleteDatabase(APITest.path)
 
     def setUp(self) -> None:
-        setUpData(APITest.connection, APITest.cursor)
-        self.app: flask.testing.FlaskClient = self.setUpAPIClient()
         self.setUpDatabase()
+        self.app: flask.testing.FlaskClient = self.setUpAPIClient()
 
+    @abc.abstractmethod
     def tearDown(self) -> None:
-        APITest.connection.commit()
-        deleteTable(APITest.cursor)
+        pass

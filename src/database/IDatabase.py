@@ -2,6 +2,7 @@ import abc
 
 from typing import List
 
+
 """Interface for database communication"""
 
 
@@ -93,4 +94,17 @@ class IDatabase(abc.ABC):
         """
         Closes the connection to this database.
         :return: None.
+        """
+
+    @abc.abstractmethod
+    def createDatabaseTables(self) -> None:
+        """
+        Creates the necessary tables for the database.
+        :return: None
+        """
+
+    def cleanUpDatabase(self) -> None:
+        """
+        Cleans up all tables in the database.
+        :return: None
         """
