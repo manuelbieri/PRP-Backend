@@ -6,17 +6,9 @@ import testUtilities.databaseTestUtilities as dataUt
 
 
 class APITest(unittest.TestCase):
-    api_base_path: str
+    api_base_path: str = '/api/v1'
     database_name: str = "test.db"
     path: str
-
-    @abc.abstractmethod
-    def setUpDatabase(self) -> None:
-        pass
-
-    @abc.abstractmethod
-    def setUpAPIClient(self) -> flask.testing.FlaskClient:
-        pass
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -32,4 +24,12 @@ class APITest(unittest.TestCase):
 
     @abc.abstractmethod
     def tearDown(self) -> None:
+        pass
+
+    @abc.abstractmethod
+    def setUpDatabase(self) -> None:
+        pass
+
+    @abc.abstractmethod
+    def setUpAPIClient(self) -> flask.testing.FlaskClient:
         pass
