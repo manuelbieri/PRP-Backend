@@ -31,28 +31,28 @@ class TestDatabase(unittest.TestCase):
         self.assertTrue({'name': 'items'} in tables)
 
     def test_read_entry(self):
-        result = self.database.readEntry("id", 1)
-        self.assertEqual(3, len(result))
+        result = self.database.readEntry(user_id=1, key="id", value=1)
+        self.assertEqual(4, len(result))
         self.assertEqual(1, result["id"])
 
     def test_read_entry_no_results(self):
-        result = self.database.readEntry("title", "not available")
+        result = self.database.readEntry(user_id=1, key="title", value="not available")
         self.assertEqual(0, len(result))
 
     def test_read_entry_multiple_results(self):
-        result = self.database.readEntry("title", "igh")
-        self.assertEqual(3, len(result))
+        result = self.database.readEntry(user_id=1, key="title", value="igh")
+        self.assertEqual(4, len(result))
 
     def test_read_entries_one_result(self):
-        result = self.database.readEntries("title", "Shopping")
+        result = self.database.readEntries(user_id=1, key="title", value="Shopping")
         self.assertEqual(1, len(result))
 
     def test_read_entries_no_results(self):
-        result = self.database.readEntries("title", "not available")
+        result = self.database.readEntries(user_id=1, key="title", value="not available")
         self.assertEqual(0, len(result))
 
     def test_read_entries_multiple_results(self):
-        result = self.database.readEntries("title", "Lights")
+        result = self.database.readEntries(user_id=1, key="title", value="Lights")
         self.assertEqual(2, len(result))
 
     @abc.abstractmethod
@@ -65,5 +65,5 @@ class TestDatabase(unittest.TestCase):
 
     def test_delete_entry(self):
         self.database.deleteEntry(1)
-        result = self.database.readEntry("id", 1)
+        result = self.database.readEntry(user_id=1, key="id", value=1)
         self.assertEqual({}, result)

@@ -12,7 +12,8 @@ todoValues: List[dict] = [{'title': 'Shopping', 'description': 'Grocery Shopping
 
 
 def addDataToTable(c: database.IDatabase.IDatabase, values: List[dict]):
-    c.writeNewEntries(copy.deepcopy(values))
+    c.writeNewEntries(1, copy.deepcopy(values))
+    c.writeNewEntries(2, copy.deepcopy(values))
 
 
 def deleteDatabase(path: str):

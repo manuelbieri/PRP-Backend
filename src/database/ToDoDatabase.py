@@ -17,22 +17,23 @@ class ToDoDatabase(database.Database.Database):
         self.cursor.execute(f"""UPDATE items SET title = {title}, description = {description} WHERE id={entry_id}""")
         self.database.commit()
 
-    def writeNewEntry(self, entry: dict) -> None:
+    def writeNewEntry(self, user_id: int, entry: dict) -> None:
         assert len(entry) > 0
+        assert user_id > 0
         assert "title" in entry
         assert entry["title"] is not None
         entry["title"] = dataUt.parseValue(entry["title"])
         entry["description"] = dataUt.parseValue(entry["description"])
-        self._insertRow(entry)
+        self._insertRow(user_id, entry)
         self.database.commit()
 
-    def writeNewEntries(self, entries: List[dict]) -> None:
+    def writeNewEntries(self, user_id: int, entries: List[dict]) -> None:
         assert len(entries) > 0
         for entry in entries:
-            self.writeNewEntry(entry)
+            self.writeNewEntry(user_id, entry)
 
-    def _insertRow(self, entry: dict) -> None:
-        self.cursor.execute(f"""INSERT INTO items(title,description) VALUES({entry["title"]},{entry["description"]})""")
+    def _insertRow(self, user_id: int, entry: dict) -> None:
+        self.cursor.execute(f"""INSERT INTO items(title,description,user) VALUES({entry["title"]},{entry["description"]},{user_id})""")
 
     def createDatabaseTables(self) -> None:
         query = """
@@ -40,6 +41,7 @@ class ToDoDatabase(database.Database.Database):
                     "id"	INTEGER,
                     "title"	TEXT NOT NULL,
                     "description"	TEXT,
+                    "user" INTEGER NOT NULL , 
                     PRIMARY KEY("id" AUTOINCREMENT)
                 );
                 """

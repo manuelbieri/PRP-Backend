@@ -17,7 +17,8 @@ class AllItems(flask_restful.Resource):
     @staticmethod
     @flask_jwt_extended.jwt_required()
     def get() -> flask.Response:
-        entries: List[dict] = data.readAllEntries()
+        user_id: int = flask_jwt_extended.get_jwt_identity()
+        entries: List[dict] = data.readAllEntries(user_id)
         return flask.jsonify(entries)
 
 
@@ -27,8 +28,9 @@ class SelectedItems(flask_restful.Resource):
     def get() -> flask.Response:
         key: str = flask.request.args.get('key', type=str)
         value: str = flask.request.args.get('value', type=str)
+        user_id: int = flask_jwt_extended.get_jwt_identity()
         try:
-            entries: List[dict] = data.readEntries(key, value)
+            entries: List[dict] = data.readEntries(user_id, key, value)
         except sqlite3.OperationalError:
             return flask.jsonify({'type': 'exception', 'message': 'Database Error'})
         return flask.jsonify(entries)
@@ -44,7 +46,8 @@ class SingleItem(flask_restful.Resource):
             API.APIUtilities.checkAPIArgs(title, description)
         except customExceptions.Exceptions.InvalidArgument:
             return flask.jsonify({'type': 'exception', 'message': 'Invalid Argument for this operation'})
-        data.writeNewEntry({'title': title, 'description': description})
+        user_id: int = flask_jwt_extended.get_jwt_identity()
+        data.writeNewEntry(user_id, {'title': title, 'description': description})
         return flask.jsonify({'type': 'success', 'message': 'Entry added successfully'})
 
     @staticmethod
