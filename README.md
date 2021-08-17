@@ -2,6 +2,8 @@
 
 Provides API to backend of the Private-Resource-Planning (PRP).
 
+![GitHub](https://img.shields.io/github/license/manuelbieri/PRP-Backend?label=License) ![GitHub](https://img.shields.io/badge/Coverage-99%25-success) ![GitHub repo size](https://img.shields.io/github/repo-size/manuelbieri/PRP-Backend) ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/manuelbieri/PRP-Backend) ![GitHub last commit](https://img.shields.io/github/last-commit/manuelbieri/PRP-Backend) ![GitHub Release Date](https://img.shields.io/github/release-date/manuelbieri/PRP-Backend)
+
 ### Documentation
 Read the wiki on GitHub.com ([PRP - Backend Wiki](https://github.com/manuelbieri/PRP-Backend/wiki)) for explanations about the use.
 
