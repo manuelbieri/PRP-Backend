@@ -9,7 +9,7 @@ import users.userHandler as userDB
 class JWTHandler:
     def __init__(self, app: flask.app.Flask):
         self.app = app
-        self.setSecretKey()
+        self._setSecretKey()
         self.JWTManager = jwt.JWTManager(app)
         self.users = userDB.UserHandler()
 
@@ -24,5 +24,5 @@ class JWTHandler:
         except TypeError:
             raise customExceptions.Exceptions.AuthenticationFailed('Invalid user')
 
-    def setSecretKey(self):
+    def _setSecretKey(self):
         self.app.config['JWT_SECRET_KEY'] = str(uuid.uuid4())

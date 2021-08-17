@@ -9,7 +9,7 @@ import database.DatabaseUtilites as dataUt
 class UserHandler:
     def __init__(self, path: str = None):
         path = os.path.dirname(__file__) + "/users/users.db" if path is None else path + "/users.db"
-        self.users: sqlite3.Connection = sqlite3.connect(path)
+        self.users: sqlite3.Connection = sqlite3.connect(path, check_same_thread=False)
         self.cursor: sqlite3.Cursor = self.users.cursor()
 
     def closeHandler(self) -> None:

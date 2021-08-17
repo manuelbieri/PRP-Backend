@@ -68,7 +68,7 @@ class Database(database.IDatabase.IDatabase, abc.ABC):
         operator = dataUt.parseOperator(value)
         value = dataUt.parseValue(value, search=True)
         return self.cursor.execute(
-            f"""SELECT * FROM {self.table} WHERE {key}{operator}{value} AND user={user_id}""")
+            f"""SELECT * FROM {self.table} WHERE {key}{operator}{value} AND {"user"}={user_id}""")
 
     def readEntries(self, user_id: int, key: str, value) -> List[dict]:
         assert key is not None
@@ -82,7 +82,7 @@ class Database(database.IDatabase.IDatabase, abc.ABC):
 
     def readAllEntries(self, user_id: int) -> List[dict]:
         assert user_id > 0
-        return self.cursor.execute(f"""SELECT * FROM {self.table} WHERE user={user_id}""").fetchall()
+        return self.cursor.execute(f"""SELECT * FROM {self.table} WHERE {"user"}={user_id}""").fetchall()
 
     def deleteEntry(self, entry_id: int) -> None:
         self.cursor.execute(f"""DELETE FROM items WHERE id={entry_id}""")
