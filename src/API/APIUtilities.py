@@ -9,5 +9,7 @@ def checkAPIArgs(*args) -> None:
 
 def checkDatabaseID(*args):
     for number in args:
-        if number <= 0 or type(number) is not int:
+        if type(number) is not int:
+            raise Exceptions.InvalidArgument('Invalid ID as argument')
+        elif number <= 0:
             raise Exceptions.InvalidArgument('Invalid ID as argument')
