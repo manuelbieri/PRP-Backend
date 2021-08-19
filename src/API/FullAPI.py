@@ -30,12 +30,17 @@ class User(flask_restful.Resource):
     def get():
         return flask.jsonify(flask_jwt_extended.get_jwt_identity())
 
+class Test(flask_restful.Resource):
+    @staticmethod
+    def get():
+        return flask.jsonify({'message': 'success'})
 
 api.add_resource(API.ToDoAPI.AllItems, '/todo/index')
 api.add_resource(API.ToDoAPI.SelectedItems, '/todo')
 api.add_resource(API.ToDoAPI.SingleItem, '/todo')
 api.add_resource(APILogin, '/login')
 api.add_resource(User, '/user')
+api.add_resource(Test, '/')
 
 if __name__ == "__main__":
     app.run(port=5001)
