@@ -131,3 +131,7 @@ dmypy.json
 # databases
 src/database/database/todo.db
 src/users/users/users.db
+
+# server
+src/main.py
+src/API/log/api.log
