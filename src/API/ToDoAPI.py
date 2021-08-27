@@ -62,7 +62,7 @@ class SingleItem(flask_restful.Resource):
         except customExceptions.Exceptions.InvalidArgument:
             return flask.jsonify({'type': 'exception', 'message': 'Invalid Argument for this operation'})
         data.updateEntry(entry_id, {'title': title, 'description': description})
-        return flask.jsonify({'type': 'success', 'message': 'Entry deleted successfully'})
+        return flask.jsonify({'type': 'success', 'message': 'Entry updated successfully'})
 
     @staticmethod
     @flask_jwt_extended.jwt_required()
